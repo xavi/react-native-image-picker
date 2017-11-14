@@ -371,7 +371,11 @@ RCT_EXPORT_METHOD(showImagePicker:(NSDictionary *)options callback:(RCTResponseS
 
             if (![[self.options objectForKey:@"noData"] boolValue]) {
                 NSString *dataString = [data base64EncodedStringWithOptions:0]; // base64 encoded image string
-                [self.response setObject:dataString forKey:@"data"];
+                if (dataString == nil) {
+                    self.callback(@[@{@"error": @"Unable to load image."}]);
+                } else {
+                    [self.response setObject:dataString forKey:@"data"];
+                }
             }
 
             BOOL vertical = (image.size.width < image.size.height) ? YES : NO;
